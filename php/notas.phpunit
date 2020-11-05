@@ -1,0 +1,61 @@
+Recursos
+	https://phpunit.readthedocs.io/en/9.3/
+	https://semaphoreci.com/community/tutorials/getting-started-with-phpunit-in-laravel
+	https://phpunit.readthedocs.io/es/latest/
+https://www.slideshare.net/DragonBe/introduction-to-unit-testing-with-phpunit-presentation-705447
+	the art of unit testing
+
+Instalación
+	standalone
+	$ wget https://phar.phpunit.de/phpunit-9.3.phar -O phpunit
+		$ chmod +x phpunit
+	$ ./phpunit --version
+
+	Es dependencia de Laravel, así que se encuentra directamente en
+	./vendor/bin/phpunit
+	(¿queda en deploy?)
+
+Uso A:
+	src/Clase.php
+	tests/ClaseTest.php
+		public function testNombreDeLaPrueba()
+	
+	corre los métodos definidos en tests
+	verificando los asserts
+	(ver código en https://github.com/ne555/phpunit.git )
+	$ phpunit --bootstrap src/autoload.php --testdox tests
+	Email #nombre de la clase
+		✔ Can be created from valid email address #nombre de la prueba
+		✔ Cannot be created from invalid email address
+		✔ Can be used as string
+
+	Hello
+		✔ Creation
+		✘ Salute
+		   │
+		   │ Failed asserting that two strings are equal.
+		   │ --- Expected
+		   │ +++ Actual
+		   │ @@ @@
+		   │ -'hola'
+		   │ +'hola hola'
+		   │
+		   │ tests/HelloTest.php:19
+		   │
+
+Uso laravel:
+	crear los test (tests/Feature/NombreTest)
+	$ php artisan make:test NombreTest
+	ejecutar
+	$ phpunit
+
+
+
+Dudas:
+	¿Cómo elegir la clase a evaluar?
+		en laravel: $ phpunit tests/Feature/ClassTest.php
+	En caso de falla se observan warnings de archivo inexistente que ensucian la salida. Posible problema con el autoload
+	La salida desde laravel no tiene los warnings
+	Falta verbosidad en la salida desde laravel (nombre de clase y test): conseguido con --testdox
+	me gustaría que muestre rutas relativas en lugar de absolutas
+	¿para qué sirve tests/Unit ?

@@ -1,3 +1,7 @@
+Recursos
+	https://shopify.dev/tutorials/authenticate-a-private-app-with-shopify-admin
+	https://shopify.dev/tutorials/authenticate-with-oauth
+
 ¿qué es cada cosa y para qué sirven?
 
 
@@ -28,3 +32,31 @@ Location:
 La orden se trabaja con la variante
 	se decrementa la cantidad en el InvLev de menor id (¿qué pasa si es 0?)
 	cuando se realiza el envío, se ajustan los inventarios de ambas InvLev (la de menor id y desde donde se mandó)
+
+
+
+Shopify access token
+Private apps can authenticate with Shopify by including the request header X-Shopify-Access-Token: {access_token}, where {access_token} is replaced by your private app's Admin API password.
+
+
+
+Apps públicas y privadas
+	autenticación pública:
+		api_key y api_secret
+		redireccionar las url al sitio de la app
+	autenticación privada
+		header
+			X-Shopify-Access-Token: {api_pass}
+		url
+			username:password@{shop}.myshopify.com
+
+URLs
+Shopify merchants access your app through the URLs you specify here.
+Allowed redirection URL(s)
+	usar https
+
+custom-app
+	Allowed redirection URL(s)
+		usar https
+	testear desde shopify partners (pero eso no tenemos...)
+	instalar la app

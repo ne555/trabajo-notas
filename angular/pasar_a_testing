@@ -1,0 +1,15 @@
+cherry pick a origin/testing
+git checkout -b testing
+git push origin testing
+
+cambio base de datos suitecrm_administracion
+    /var/wwwtst/etangram/etangram/webservice/etangram/metadata
+    copiar stored procedures
+    copiar meta_catalog y sp.json
+bajar y levantar el servidor tstnodejs
+probar cambios desde origin/testing
+localhost:4200
+
+replicar pasaje de develop
+probar en testing
+http://tstetg.i2tsa.com.ar/etangram/app/login

@@ -1,31 +1,33 @@
-Recursos
-	https://shopify.dev/tutorials/authenticate-a-private-app-with-shopify-admin
-	https://shopify.dev/tutorials/authenticate-with-oauth
+# Shopify
 
-¿qué es cada cosa y para qué sirven?
+## Recursos
+https://shopify.dev/tutorials/authenticate-a-private-app-with-shopify-admin
+https://shopify.dev/tutorials/authenticate-with-oauth
+
+## ¿qué es cada cosa y para qué sirven?
 
 
-Product:
+### Product:
 	producto tipo: nombre, descripción, categorías (tags), imágenes
 	producto tiene opciones (¿?) max 3
 	y variantes (combinación de opciones)
 
-Variante:
+### Variante:
 	refiere a un producto
 	diferentes versiones
 		precio
 		color
 		peso
 
-Inventory Item:
+### Inventory Item:
 	relación 1:1 con Variante
 	producto físico, para inventario, transporte
 
-Inventory Level:
+### Inventory Level:
 	Relaciona «Inventory Item» con «Location» (un inventory level por cada location)
 	almacena la cantidad existente en el local
 
-Location:
+### Location:
 	ubicación física (almacén)
 
 
@@ -35,12 +37,12 @@ La orden se trabaja con la variante
 
 
 
-Shopify access token
+## Shopify access token
 Private apps can authenticate with Shopify by including the request header X-Shopify-Access-Token: {access_token}, where {access_token} is replaced by your private app's Admin API password.
 
 
 
-Apps públicas y privadas
+### Apps públicas y privadas
 	autenticación pública:
 		api_key y api_secret
 		redireccionar las url al sitio de la app

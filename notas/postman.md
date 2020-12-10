@@ -1,6 +1,8 @@
+# Postman
+
 crear entorno (environment) para trabajar con variables
 
-shopify
+## shopify
 	Bug:
 		La documentación en https://shopify.dev/tutorials/debug-apps-with-postman-for-mac-os establece para la autorización
 			Authorization
@@ -9,6 +11,7 @@ shopify
 				pass: {{pass}}
 		con esto se logra GET product y DELETE product,
 		pero falla en el POST product, devolviendo un enlace para realizar la autenticación
+```html
 <html>
   <body>
     <noscript>
@@ -20,6 +23,7 @@ shopify
     </script>
   </body>
 </html>
+```
 
 		Solución:
 			Authorization

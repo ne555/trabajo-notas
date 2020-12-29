@@ -109,19 +109,14 @@ Esta traducción se realiza sobre texto estático en los .html
 ### Problemas al integrarlo en etangram
 Los tags de i18n sirven únicamente para cambiar texto estático, por lo tanto se logró cambiar únicamente la pantalla de consulta-expedientes y no la de expedientes que generaba los títulos y tablas mediante un stored procedure.
 
-El comando
-    ```bash
-    $ ng serve --configuration es
-    ```
-    fallaba al quedarse sin memoria.
-
-    Para solucionar este problema, se eliminó la opción ``"aot": true``, por lo que para observar los cambios es necesario generar los archivos en ``dist/`` que luego se levantarán mediante ``live-server``
-    ```bash
-    $ npm install -g live-server
-    $ node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build --aot --output-hashing=all --configuration es
-    $ cd dist/etangram
-    $ live-server --entry-file=./index.html
-    ```
+El comando ``$ ng serve --configuration es`` fallaba al quedarse sin memoria.
+Para solucionar este problema, se eliminó la opción ``"aot": true``, por lo que para observar los cambios es necesario generar los archivos en ``dist/`` que luego se levantarán mediante ``live-server``
+```bash
+$ npm install -g live-server
+$ node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build --aot --output-hashing=all --configuration es
+$ cd dist/etangram
+$ live-server --entry-file=./index.html
+```
 
 
 ## Utilizando variables de entorno

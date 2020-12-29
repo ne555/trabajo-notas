@@ -100,25 +100,28 @@ Esta traducción se realiza sobre texto estático en los .html
             }
             ...
     ```
-    De esta manera se podrá las traducciones en las funciones de ``build``, ``serve`` o ``e2e`` utilizando el flag de ``--configuration``
+    De esta manera se tendrán las traducciones en las funciones de ``build``, ``serve`` o ``e2e`` utilizando el flag de ``--configuration``
     ```bash
     $ ng serve --configuration es
     ```
 
-    Al intentar implementarlo, este último comando fallaba al quedarse sin memoria.
-    Para solucionar este problema, se generarán los archivos en ``dist/`` y luego se levantarán mediante ``live-server``
+
+### Problemas al integrarlo en etangram
+Los tags de i18n sirven únicamente para cambiar texto estático, por lo tanto se logró cambiar únicamente la pantalla de consulta-expedientes y no la de expedientes que generaba los títulos y tablas mediante un stored procedure.
+
+El comando
+    ```bash
+    $ ng serve --configuration es
+    ```
+    fallaba al quedarse sin memoria.
+
+    Para solucionar este problema, se eliminó la opción ``"aot": true``, por lo que para observar los cambios es necesario generar los archivos en ``dist/`` que luego se levantarán mediante ``live-server``
     ```bash
     $ npm install -g live-server
     $ node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build --aot --output-hashing=all --configuration es
     $ cd dist/etangram
     $ live-server --entry-file=./index.html
     ```
-
-### Problemas al integrarlo en etangram
-Los tags de i18n sirven únicamente para cambiar texto estático, por lo tanto se logró cambiar únicamente la pantalla de consulta-expedientes y no la de expedientes que generaba los títulos y tablas mediante un stored procedure.
-
-La documentación seleccionaba sugería el uso del flag ``"aot": true`` dentro del angular.json, pero al intentar compilar con la nueva configuración fallaba al quedarse sin memoria.
-Por esta razón se deshabilitó aot, pero entonces ya no se podían observear los cambios con ng serve.
 
 
 ## Utilizando variables de entorno

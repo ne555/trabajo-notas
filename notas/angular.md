@@ -28,8 +28,8 @@ npx -p @angular/cli@9.1.12 ng new Angular9App
 # Internacionalización
 Existen diferencias entre versiones, se darán las guías para la versión 6 y para la 11
 
-## i18n Angular 6
-Se describen a continuación los pasos para realizar la traducción de una aplicación creada con Angular versión 6.
+# i18n Angular 6
+Se describen a continuación los pasos para realizar la traducción de una aplicación creada con Angular versión 6 utilizando los tags i18n.
 Esta traducción se realiza sobre texto estático en los .html
 
 1. Marcar el contenido a traducir.
@@ -106,10 +106,11 @@ Esta traducción se realiza sobre texto estático en los .html
     ```
 
 
-### Problemas al integrarlo en etangram
+## Problemas al integrarlo en etangram
 Los tags de i18n sirven únicamente para cambiar texto estático, por lo tanto se logró cambiar únicamente la pantalla de consulta-expedientes y no la de expedientes que generaba los títulos y tablas mediante un stored procedure.
+Investigar el uso de la opción "fileReplacements" junto con variables de entorno.
 
-El comando ``$ ng serve --configuration es`` fallaba al quedarse sin memoria.
+Se observó que el comando ``$ ng serve --configuration es`` fallaba al quedarse sin memoria.
 Para solucionar este problema, se eliminó la opción ``"aot": true``, por lo que para observar los cambios es necesario generar los archivos en ``dist/`` que luego se levantarán mediante ``live-server``
 ```bash
 $ npm install -g live-server

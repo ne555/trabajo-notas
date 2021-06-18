@@ -1,0 +1,258 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+<title>angular</title></head>
+<body><p>develop
+<a href='http://devetg.i2tsa.com.ar/frontendintegraciondefinitiva/login' target='_blank' class='url'>http://devetg.i2tsa.com.ar/frontendintegraciondefinitiva/login</a></p>
+<h2>Versión en específico</h2>
+<pre><code class='language-shell' lang='shell'>#Angular 2:the last RC version before switching to angular 4 as far as I can tell — based on this and the next version now depends on angular
+npx -p @angular/cli@1.0.0-rc.2 ng new angular2app
+
+#Angular 4: the last CLI version before angular 5
+npx -p @angular/cli@1.4.10 ng new angular4app
+
+#Angular 5: the last CLI version before 6
+npx -p @angular/cli@1.7.4 ng new angular5app
+
+#Angular 6: the last CLI version before 7
+npx -p @angular/cli@6.2.9 ng new angular6app
+
+# Angular 7: (the last CLI version before 8
+npx -p @angular/cli@7.3.9 ng new angular8app
+
+#Angular 8: the last CLI version before 9
+npx -p @angular/cli@8.3.25 ng new angular8app
+
+#Angular 9: not last CLI version 9
+npx -p @angular/cli@9.1.12 ng new Angular9App
+</code></pre>
+<h1>Internacionalización</h1>
+<p>Existen diferencias entre versiones, se darán las guías para la versión 6 y para la 11</p>
+<h1>i18n Angular 6</h1>
+<p>Se describen a continuación los pasos para realizar la traducción de una aplicación creada con Angular versión 6.
+Esta traducción se realiza sobre texto estático en los .html</p>
+<ol start='' >
+<li><p>Marcar el contenido a traducir.
+Se agrega la directiva <code>i18n</code> dentro del tag html.
+Ejemplo:</p>
+<pre><code class='language-html' lang='html'>&lt;h1 i18n=&quot;saludo|&quot;&gt;Hello&lt;/h1&gt;
+</code></pre>
+<p>donde <code>&quot;saludo|&quot;</code> es una etiqueta de significado. A igual significado y contenido corresponde la misma traducción.</p>
+</li>
+<li><p>Generar los archivos de traducción.
+Mediante el comando</p>
+<pre><code class='language-shell' lang='shell'>$ ng xi18n  --output-path locale --out-file messages.idioma.xlf
+</code></pre>
+<p>se genera un archivo <code>src/locale/messages.idioma.xlf</code> que contiene los mensajes a traducir de <em>todos</em> los archivos .html</p>
+<blockquote><p style="color:#FF0000";>Advertencia: Esta operación es destructiva, si el comando se ejecuta nuevamente se perderán los cambios realizados sobre el archivo.
+Se recomienda el versionado del mismo.</p>
+</blockquote>
+</li>
+<li><p>Realizar la traducción.
+El archivo .xlf generado contiene el texto a traducir dentro de tags <code>&lt;source&gt;</code>.
+La traducción se colocará dentro de tags <code>&lt;target&gt;</code>.
+Ejemplo:</p>
+<pre><code class='language-html' lang='html'>  &lt;trans-unit id=&quot;f99f908ba1100cc6f35d85f29c73ad07d1f38a8e&quot; datatype=&quot;html&quot;&gt;
+    &lt;source&gt;Hello&lt;/source&gt;
+    &lt;target&gt;Hola&lt;/target&gt;
+    &lt;context-group purpose=&quot;location&quot;&gt;
+      &lt;context context-type=&quot;sourcefile&quot;&gt;app/app.component.html&lt;/context&gt;
+      &lt;context context-type=&quot;linenumber&quot;&gt;20&lt;/context&gt;
+    &lt;/context-group&gt;
+    &lt;context-group purpose=&quot;location&quot;&gt;
+      &lt;context context-type=&quot;sourcefile&quot;&gt;app/app.component.html&lt;/context&gt;
+      &lt;context context-type=&quot;linenumber&quot;&gt;23&lt;/context&gt;
+    &lt;/context-group&gt;
+    &lt;note priority=&quot;1&quot; from=&quot;meaning&quot;&gt;saludo&lt;/note&gt;
+  &lt;/trans-unit&gt;
+</code></pre>
+</li>
+<li><p>Compilación.
+Se creará una opción de compilación en el archivo <code>angular.json</code></p>
+<pre><code class='language-json' lang='json'>{
+  &quot;projects&quot;: {
+&quot;nombre-app&quot;: {
+  &quot;architect&quot;: {
+    &quot;build&quot;: {
+      &quot;configurations&quot;: {
+        &quot;es&quot;: {
+            &quot;i18nFile&quot;: &quot;src/locale/messages.es.xlf&quot;,
+            &quot;i18nLocale&quot;: &quot;es&quot;,
+            &quot;i18nFormat&quot;: &quot;xlf&quot;,
+            &quot;aot&quot;: true
+        },
+        ...
+    &quot;serve&quot;: {
+      &quot;configurations&quot;: {
+        &quot;es&quot;:{
+            &quot;browserTarget&quot;: &quot;nombre-app:build:es&quot;
+        }
+        ...
+&quot;nombre-app-e2e&quot;: {
+  &quot;architect&quot;: {
+    &quot;e2e&quot;: {
+      &quot;configurations&quot;: {
+        &quot;es&quot;:{
+            &quot;devServerTarget&quot;: &quot;nombre-app:serve:es&quot;
+        }
+        ...
+</code></pre>
+<p>De esta manera se tendrán las traducciones en las funciones de <code>build</code>, <code>serve</code> o <code>e2e</code> utilizando el flag de <code>--configuration</code></p>
+<pre><code class='language-shell' lang='shell'>$ ng serve --configuration es
+</code></pre>
+</li>
+
+</ol>
+<h2>Problemas al integrarlo en etangram</h2>
+<p>Los tags de i18n sirven únicamente para cambiar texto estático, por lo tanto se logró cambiar únicamente la pantalla de consulta-expedientes y no la de expedientes que generaba los títulos y tablas mediante un stored procedure.</p>
+<p>El comando <code>$ ng serve --configuration es</code> fallaba al quedarse sin memoria.
+Para solucionar este problema, se eliminó la opción <code>&quot;aot&quot;: true</code>, por lo que para observar los cambios es necesario generar los archivos en <code>dist/</code> que luego se levantarán mediante <code>live-server</code></p>
+<pre><code class='language-shell' lang='shell'>$ npm install -g live-server
+$ node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build --aot --output-hashing=all --configuration es
+$ cd dist/etangram
+$ live-server --entry-file=./index.html
+</code></pre>
+<h2>Utilizando variables de entorno</h2>
+<p>El método anterior sirve únicamente para cambiar texto estático, no es útil si necesitamos cabiar el contenido de alguna variable que se muestre en el html.
+Para esto, se pueden utilizar las variables de entorno</p>
+<pre><code class='language-typescript' lang='typescript'>// src/environment.ts
+export const environment = {
+  production: false,
+  title: &quot;Test&quot;
+};
+// src/environment.es.ts
+export const environment = {
+  production: false,
+  title: &quot;Prueba&quot;
+};
+// src/app/nombre.component.ts
+import { environment } from &#39;src/environments/environment&#39;;
+//...
+    this.title = environment.title
+</code></pre>
+<p>y configurar un reemplazo automático en <code>angular.json</code></p>
+<pre><code class='language-json' lang='json'>            &quot;es&quot;: {
+                &quot;i18nFile&quot;: &quot;src/locale/messages.es.xlf&quot;,
+                &quot;i18nLocale&quot;: &quot;es&quot;,
+                &quot;i18nFormat&quot;: &quot;xlf&quot;,
+                &quot;aot&quot;: true,
+                &quot;fileReplacements&quot;:[
+                    {
+                        &quot;replace&quot;: &quot;src/environments/environment.ts&quot;,
+                        &quot;with&quot;: &quot;src/environments/environment.es.ts&quot;
+                    },
+                ],
+            }
+</code></pre>
+<hr />
+<h4>Fin</h4>
+<p>&nbsp;</p>
+<blockquote><p>Advertencia: Aparentemente este método no permite traducir variables (interpolación)
+sólo se traduce texto estático dentro de tags</p>
+</blockquote>
+<p>Para que la aplicación soporte internacionalización, siga estos pasos:</p>
+<ol start='' >
+<li><p>Agregue el paquete de internacionalización</p>
+<pre><code class='language-shell' lang='shell'>$ ng add @angular/localize
+</code></pre>
+<blockquote><p>Angular 6 no soporta el paquete localize
+no lo instalo</p>
+</blockquote>
+</li>
+
+</ol>
+<ol start='' >
+<li><p>Usar el id del <em>locale</em> (puntuación, formato de fecha, moneda)</p>
+</li>
+<li><p>Dar formato segun el <em>locale</em>. Usar <em>pipes</em></p>
+</li>
+<li><p>Preparar las templates.</p>
+<ol start='' >
+<li><p>Marcar el texto a traducir: atributo <code>i18n</code> en los tags</p>
+<pre><code class='language-html' lang='html'>&lt;h1 i18n&gt;Hello i18n!&lt;/h1&gt;
+</code></pre>
+</li>
+<li><p>Agregar descripciones a los tags <code>meaning | description</code></p>
+<pre><code class='language-html' lang='html'>&lt;h1 i18n=&quot;site header | An introduction header for this sample&quot;&gt;Hello i18n!&lt;/h1&gt;
+</code></pre>
+<p>Usa <em>meaning</em>  para hacer la traducción una sola vez.
+Mismo significado y contenido traduce igual.</p>
+</li>
+
+</ol>
+</li>
+<li><p>Realizar la traducción</p>
+<ol start='' >
+<li><p>Crear los archivos de traducción</p>
+<pre><code class='language-shell' lang='shell'>$ ng extract-i18n
+$ ng extract-i18n --output-path src/locale --out-file messages.esp.xlf
+</code></pre>
+<p>En Angular 6 el comando es</p>
+<pre><code class='language-shell' lang='shell'>$ ng xi18n
+$ ng xi18n  --output-path locale --out-file messages.esp.xlf
+</code></pre>
+</li>
+<li><p>Traducir el texto entre <code>&lt;source&gt;</code> tags y ubicarlo en <code>&lt;target&gt;</code></p>
+</li>
+
+</ol>
+<pre><code class='language-html' lang='html'>&lt;source&gt;oh brave new world&lt;/source&gt;
+&lt;target&gt;hola mundo feliz&lt;/target&gt;
+</code></pre>
+</li>
+<li><p>Instalar las traducciones en la aplicación
+<code>project/nombre-proyecto/i18n/sourceLocale</code> usada en el código
+<code>project/nombre-proyecto/i18n/locales</code>  mapa de <em>locale</em> a archivo de traducción</p>
+<ol start='' >
+<li><p>Generar las versiones de la app
+<code>project/nombre-proyecto/build/options/localize</code>
+Establecer en <code>true</code> o en un arreglo de locales a construir</p>
+<blockquote><p>Advertencia: en dev solamente se puede elegir <em>una</em> locale</p>
+</blockquote>
+<blockquote><p>Alternativa: usar en la línea de comandos <code>--localize</code>
+Cada vez que cambie el archivo de traducción, reiniciar el serve</p>
+</blockquote>
+</li>
+
+</ol>
+</li>
+<li><p>Múltiples locales. <code>baseHref</code></p>
+</li>
+
+</ol>
+<p>&nbsp;</p>
+<pre><code class='language-html' lang='html'>&lt;h1 i18n&gt;Texto a traducir&lt;/h1&gt;
+</code></pre>
+<pre><code class='language-shell' lang='shell'>$ ng xi18n --output-path=locale/
+</code></pre>
+<p>genera un archivo <code>mesages.xlf</code>, cambiar el nombre a algo alusivo
+Buscar tags <code>&lt;source&gt;</code> y agregar un <code>&lt;target&gt;</code> con la traducción</p>
+<h3>Compilación</h3>
+<h4>Configuración</h4>
+<p>en <code>angular.json</code> agregar una configuración de compilación
+<code>projects/nombre-proyecto/architect/build/configurations</code></p>
+<pre><code class='language-json' lang='json'>&quot;es&quot;: {
+    &quot;i18nFile&quot;: &quot;src/locale/messages.es.xlf&quot;,
+    &quot;i18nLocale&quot;: &quot;es&quot;,
+    &quot;i18nFormat&quot;: &quot;xlf&quot;,
+    &quot;aot&quot;: true
+}
+</code></pre>
+<p><code>projects/nombre-proyecto/architect/serve/configurations</code></p>
+<pre><code class='language-json' lang='json'>&quot;es&quot;: {
+    &quot;browserTarget&quot;: &quot;test-i18n:build:es&quot;
+}
+</code></pre>
+<p><code>projects/nombre-proyecto-e2e/architect/serve/configurations/</code></p>
+<pre><code class='language-json' lang='json'>&quot;es&quot;: {
+    &quot;devServerTarget&quot;: &quot;test-i18n:serve:es&quot;
+}
+</code></pre>
+<p>¿ah? ¿de dónde salió ese e2e?</p>
+<h4>Compilación propiamente dicha</h4>
+<p>(ver con node)</p>
+<pre><code class='language-shell' lang='shell'>$ ng serve -o --configuration=es
+</code></pre>
+</body>
+</html>

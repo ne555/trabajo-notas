@@ -1,0 +1,5 @@
+ln -s ../angular/notas.md                angular_notas.md
+ln -s ../jasper/notas.md                 jasper_notas.md
+ln -s ../laravel/notas.md                laravel_notas.md
+ln -s ../postman/notas.md                postman_notas.md
+ln -s ../shopify/notas.md                shopify_notas.md

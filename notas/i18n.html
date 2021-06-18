@@ -1,0 +1,88 @@
+<h1>Internacionalización</h1>
+<p>Se describen a continuación los pasos para realizar la traducción de una aplicación creada con Angular versión 6 utilizando los tags i18n.
+Esta traducción se realiza sobre texto estático en los .html
+Se tomará como ejemplo el reemplazo expedientes/legajos del proyecto etangram</p>
+<ol start='' >
+<li><p>Marcar el contenido a traducir.
+Se agrega la directiva <code>i18n</code> dentro del tag html.
+Ejemplo:</p>
+<pre><code class='language-html' lang='html'>&lt;h2 i18n=&quot;expediente title|&quot;&gt;EXPEDIENTES&lt;/h2&gt;
+</code></pre>
+<p>donde <code>&quot;expediente title|&quot;</code> es una etiqueta de significado. A igual significado y contenido corresponde la misma traducción.</p>
+</li>
+<li><p>Generar los archivos de traducción.
+Mediante el comando</p>
+<pre><code class='language-shell' lang='shell'>$ ng xi18n  --output-path locale --out-file messages.i2t.xlf
+</code></pre>
+<p>se genera un archivo <code>src/locale/messages.i2t.xlf</code> que contiene los mensajes a traducir de <em>todos</em> los archivos .html</p>
+<blockquote><p>Advertencia: Esta operación es destructiva, si el comando se ejecuta nuevamente se perderán los cambios realizados sobre el archivo.
+Se recomienda el versionado del mismo.</p>
+</blockquote>
+</li>
+<li><p>Realizar la traducción.
+El archivo .xlf generado contiene el texto a traducir dentro de tags <code>&lt;source&gt;</code>.
+La traducción se colocará dentro de tags <code>&lt;target&gt;</code>.
+Ejemplo:</p>
+<pre><code class='language-html' lang='html'>  &lt;trans-unit id=&quot;85bbd01b29a3c5f92f8f6df6f1bbedbf5ffbccea&quot; datatype=&quot;html&quot;&gt;
+    &lt;source&gt;EXPEDIENTES&lt;/source&gt;
+    &lt;target&gt;LEGAJOS&lt;/target&gt;
+    &lt;context-group purpose=&quot;location&quot;&gt;
+      &lt;context context-type=&quot;sourcefile&quot;&gt;app/components/pages/consulta-expedientes/consulta-expedientes.component.html&lt;/context&gt;
+      &lt;context context-type=&quot;linenumber&quot;&gt;7&lt;/context&gt;
+    &lt;/context-group&gt;
+    &lt;note priority=&quot;1&quot; from=&quot;meaning&quot;&gt;expediente title&lt;/note&gt;
+  &lt;/trans-unit&gt;
+</code></pre>
+</li>
+<li><p>Compilación.
+Se creará una opción de compilación en el archivo <code>angular.json</code></p>
+<pre><code class='language-json' lang='json'>{
+  &quot;projects&quot;: {
+&quot;nombre-app&quot;: {
+  &quot;architect&quot;: {
+    &quot;build&quot;: {
+      &quot;configurations&quot;: {
+        &quot;i2t&quot;:{
+            &quot;i18nFile&quot;: &quot;src/locale/messages.i2t.xlf&quot;,
+            &quot;i18nLocale&quot;: &quot;es&quot;,
+            &quot;i18nFormat&quot;: &quot;xlf&quot;
+        }
+        ...
+    &quot;serve&quot;: {
+      &quot;configurations&quot;: {
+        &quot;i2t&quot;:{
+            &quot;browserTarget&quot;: &quot;nombre-app:build:i2t&quot;
+        }
+        ...
+&quot;nombre-app-e2e&quot;: {
+  &quot;architect&quot;: {
+    &quot;e2e&quot;: {
+      &quot;configurations&quot;: {
+        &quot;i2t&quot;:{
+            &quot;devServerTarget&quot;: &quot;nombre-app:serve:i2t&quot;
+        }
+        ...
+</code></pre>
+<p>De esta manera se tendrán las traducciones en las funciones de <code>build</code>, <code>serve</code> o <code>e2e</code> utilizando el flag de <code>--configuration</code></p>
+<pre><code class='language-shell' lang='shell'>$ ng serve --configuration i2t
+</code></pre>
+</li>
+
+</ol>
+<h2>Problemas al integrarlo en etangram</h2>
+<p>Los tags de i18n sirven únicamente para cambiar texto estático, por lo tanto se logró cambiar únicamente la pantalla de /consulta-expedientes y no la de /expedientes que generaba los títulos y tablas mediante un stored procedure. (consulta-dinamica)
+Nombre de columna:</p>
+<pre><code>tg06_tg_reportes.name = tg05_expedientes
+tg06_tg_atributosreportes.{name,atributo_bd}
+</code></pre>
+<p>Titulo:</p>
+<pre><code>tg06_tg_reportes.description
+</code></pre>
+<p>Investigar el uso de la opción &quot;fileReplacements&quot; junto con variables de entorno.</p>
+<p>Se observó que el comando <code>$ ng serve --configuration i2t</code> fallaba al quedarse sin memoria.
+Para solucionar este problema, se eliminó la opción <code>&quot;aot&quot;: true</code>, por lo que para observar los cambios es necesario generar los archivos en <code>dist/</code> que luego se levantarán mediante <code>live-server</code></p>
+<pre><code class='language-shell' lang='shell'>$ npm install -g live-server
+$ node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build --aot --output-hashing=all --configuration i2t
+$ cd dist/etangram
+$ live-server --entry-file=./index.html
+</code></pre>

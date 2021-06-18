@@ -28,13 +28,19 @@ FvMdFaEyAc
 http://131.255.4.200:8080/jasperserver/
 http://10.20.8.5:8080/jasperserver/
 
+
 (organization vacio)
 jasperadmin
 FvMdFaEyAc
+
+**produccion**
+http://jasper.i2t.com.ar:8080/jasperserver/
+jasperadmin
+CNyXIQmHYu
 
 library version: 6.3.1
 
 *url generacion reporte*
 http://devjasper.i2tsa.com.ar/Ejecutar_Reportes2.php?ruta_reporte=/Dev_Reports/i2T/SuiteCRM/Curriculum_Vitae/cv&formato=PDF&param_id_puesto_recurso=3037
 
-
+repo:/images/logo_cas
